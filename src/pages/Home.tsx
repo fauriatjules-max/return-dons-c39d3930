@@ -6,32 +6,32 @@ import heroImage from "@/assets/hero-sharing.jpg";
 const Home = () => {
   return (
     <div className="min-h-screen bg-background">
-      {/* Hero Section */}
+      {/* Hero Section - Mobile optimized */}
       <section className="relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-background to-secondary/10" />
-        <div className="relative container mx-auto px-4 py-16 md:py-24">
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            <div className="space-y-6 animate-fade-in">
-              <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 rounded-full">
-                <Leaf className="w-4 h-4 text-primary" />
-                <span className="text-sm font-medium text-primary">Donnez, Partagez, Agissez</span>
+        <div className="relative container mx-auto px-4 py-12 sm:py-16 md:py-24">
+          <div className="grid md:grid-cols-2 gap-8 sm:gap-12 items-center">
+            <div className="space-y-5 sm:space-y-6 animate-fade-in">
+              <div className="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 bg-primary/10 rounded-full">
+                <Leaf className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-primary" />
+                <span className="text-xs sm:text-sm font-medium text-primary">Donnez, Partagez, Agissez</span>
               </div>
-              <h1 className="text-5xl md:text-6xl font-heading font-bold leading-tight">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-heading font-bold leading-tight">
                 Transformez vos objets en{" "}
                 <span className="text-primary">solidarité</span>
               </h1>
-              <p className="text-lg text-muted-foreground">
+              <p className="text-base sm:text-lg text-muted-foreground leading-relaxed">
                 Découvrez des dons près de chez vous. Donnez une seconde vie à vos objets. 
                 Rejoignez une communauté engagée pour un monde plus durable.
               </p>
-              <div className="flex flex-col sm:flex-row gap-4">
-                <Button asChild size="lg" className="shadow-primary">
+              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
+                <Button asChild size="lg" className="shadow-primary h-12 text-base">
                   <Link to="/app">
                     <MapPin className="mr-2 h-5 w-5" />
                     Explorer la carte
                   </Link>
                 </Button>
-                <Button asChild size="lg" variant="outline">
+                <Button asChild size="lg" variant="outline" className="h-12 text-base">
                   <Link to="/app">
                     <Heart className="mr-2 h-5 w-5" />
                     Publier un don
@@ -39,42 +39,43 @@ const Home = () => {
                 </Button>
               </div>
             </div>
-            <div className="relative animate-scale-in">
-              <div className="absolute inset-0 bg-gradient-to-tr from-primary/20 to-secondary/20 rounded-3xl blur-3xl" />
+            <div className="relative animate-scale-in order-first md:order-last">
+              <div className="absolute inset-0 bg-gradient-to-tr from-primary/20 to-secondary/20 rounded-2xl sm:rounded-3xl blur-3xl" />
               <img 
                 src={heroImage} 
                 alt="Communauté de partage" 
-                className="relative rounded-3xl shadow-medium w-full"
+                className="relative rounded-2xl sm:rounded-3xl shadow-medium w-full"
+                loading="eager"
               />
             </div>
           </div>
         </div>
       </section>
 
-      {/* Features Section */}
-      <section className="py-20 bg-card">
+      {/* Features Section - Mobile optimized */}
+      <section className="py-12 sm:py-16 md:py-20 bg-card">
         <div className="container mx-auto px-4">
-          <div className="text-center max-w-3xl mx-auto mb-16">
-            <h2 className="text-4xl font-heading font-bold mb-4">
+          <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-12 md:mb-16">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-heading font-bold mb-3 sm:mb-4">
               Comment ça marche ?
             </h2>
-            <p className="text-lg text-muted-foreground">
+            <p className="text-base sm:text-lg text-muted-foreground">
               Une plateforme simple et intuitive pour donner et recevoir
             </p>
           </div>
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
             {features.map((feature, index) => (
               <div 
                 key={index}
-                className="bg-background p-8 rounded-2xl shadow-soft hover:shadow-medium transition-smooth"
+                className="bg-background p-6 sm:p-8 rounded-xl sm:rounded-2xl shadow-soft hover:shadow-medium transition-smooth"
               >
-                <div className="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center mb-6">
-                  <feature.icon className="w-7 h-7 text-primary" />
+                <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-primary/10 flex items-center justify-center mb-4 sm:mb-6">
+                  <feature.icon className="w-6 h-6 sm:w-7 sm:h-7 text-primary" />
                 </div>
-                <h3 className="text-xl font-heading font-semibold mb-3">
+                <h3 className="text-lg sm:text-xl font-heading font-semibold mb-2 sm:mb-3">
                   {feature.title}
                 </h3>
-                <p className="text-muted-foreground">
+                <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
                   {feature.description}
                 </p>
               </div>
@@ -83,16 +84,16 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Stats Section */}
-      <section className="py-20 bg-primary text-primary-foreground">
+      {/* Stats Section - Mobile optimized */}
+      <section className="py-12 sm:py-16 md:py-20 bg-primary text-primary-foreground">
         <div className="container mx-auto px-4">
-          <div className="grid md:grid-cols-4 gap-8 text-center">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8 text-center">
             {stats.map((stat, index) => (
-              <div key={index} className="space-y-2">
-                <div className="text-5xl font-heading font-bold">
+              <div key={index} className="space-y-1 sm:space-y-2">
+                <div className="text-3xl sm:text-4xl md:text-5xl font-heading font-bold">
                   {stat.value}
                 </div>
-                <div className="text-primary-foreground/80">
+                <div className="text-xs sm:text-sm md:text-base text-primary-foreground/80">
                   {stat.label}
                 </div>
               </div>
@@ -101,17 +102,17 @@ const Home = () => {
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-br from-secondary/10 via-background to-primary/10">
+      {/* CTA Section - Mobile optimized */}
+      <section className="py-12 sm:py-16 md:py-20 bg-gradient-to-br from-secondary/10 via-background to-primary/10">
         <div className="container mx-auto px-4 text-center">
-          <div className="max-w-3xl mx-auto space-y-6">
-            <h2 className="text-4xl md:text-5xl font-heading font-bold">
+          <div className="max-w-3xl mx-auto space-y-5 sm:space-y-6">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-heading font-bold leading-tight">
               Rejoignez le mouvement
             </h2>
-            <p className="text-lg text-muted-foreground">
+            <p className="text-base sm:text-lg text-muted-foreground leading-relaxed">
               Des milliers de personnes partagent déjà leurs objets et font vivre l'économie circulaire
             </p>
-            <Button asChild size="lg" className="shadow-primary">
+            <Button asChild size="lg" className="shadow-primary h-12 text-base">
               <Link to="/app">
                 Commencer maintenant
               </Link>

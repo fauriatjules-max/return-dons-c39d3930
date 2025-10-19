@@ -7,7 +7,7 @@ const MapView = () => {
   const [viewMode, setViewMode] = useState<"standard" | "satellite">("standard");
 
   return (
-    <div className="relative h-full w-full">
+    <div className="relative h-full w-full overflow-hidden touch-manipulation">
       {/* Map Background */}
       <div className={`absolute inset-0 ${
         viewMode === "standard" 
@@ -21,49 +21,52 @@ const MapView = () => {
       </div>
 
       {/* Search Bar */}
-      <div className="absolute top-4 left-4 right-4 z-10 flex gap-2">
+      <div className="absolute top-3 sm:top-4 left-3 sm:left-4 right-3 sm:right-4 z-10 flex gap-2">
         <div className="flex-1 relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 sm:h-5 sm:w-5 text-muted-foreground pointer-events-none" />
           <Input 
-            placeholder="Rechercher un don..."
-            className="pl-10 bg-card shadow-soft border-border"
+            placeholder="Rechercher..."
+            className="pl-9 sm:pl-10 h-11 sm:h-10 bg-card shadow-soft border-border text-base"
+            inputMode="search"
           />
         </div>
-        <Button size="icon" variant="outline" className="bg-card shadow-soft">
+        <Button size="icon" variant="outline" className="bg-card shadow-soft h-11 w-11 sm:h-10 sm:w-10 shrink-0">
           <SlidersHorizontal className="h-5 w-5" />
         </Button>
       </div>
 
-      {/* View Toggle */}
-      <div className="absolute top-4 right-4 z-10">
+      {/* View Toggle - Hidden on mobile, shown on larger screens */}
+      <div className="absolute top-16 sm:top-4 right-3 sm:right-4 z-10">
         <Button 
           size="icon" 
           variant="outline"
-          className="bg-card shadow-soft"
+          className="bg-card shadow-soft h-11 w-11 sm:h-10 sm:w-10"
           onClick={() => setViewMode(viewMode === "standard" ? "satellite" : "standard")}
+          aria-label="Changer de vue"
         >
           <Layers className="h-5 w-5" />
         </Button>
       </div>
 
-      {/* Mock Pins */}
-      <div className="absolute inset-0 flex items-center justify-center">
-        <div className="grid grid-cols-3 gap-16">
+      {/* Mock Pins - Touch optimized */}
+      <div className="absolute inset-0 flex items-center justify-center p-4">
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-8 sm:gap-16">
           {mockPins.map((pin) => (
-            <div 
+            <button
               key={pin.id}
-              className="relative group cursor-pointer"
+              className="relative group touch-manipulation active:scale-95 transition-smooth"
+              aria-label={`Don: ${pin.title}`}
             >
               <div 
-                className="w-12 h-12 rounded-full flex items-center justify-center shadow-medium transition-smooth hover:scale-110"
+                className="w-14 h-14 sm:w-12 sm:h-12 rounded-full flex items-center justify-center shadow-medium transition-smooth active:scale-110"
                 style={{ backgroundColor: pin.color }}
               >
-                <span className="text-2xl">🎁</span>
+                <span className="text-3xl sm:text-2xl">🎁</span>
               </div>
               
-              {/* Tooltip on hover */}
-              <div className="absolute top-full mt-2 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-smooth pointer-events-none">
-                <div className="bg-card rounded-xl shadow-medium p-3 min-w-[200px] border border-border">
+              {/* Tooltip - Touch optimized */}
+              <div className="absolute top-full mt-2 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 group-active:opacity-100 transition-smooth pointer-events-none z-20">
+                <div className="bg-card rounded-xl shadow-medium p-3 w-[240px] sm:min-w-[200px] border border-border">
                   <img 
                     src="/placeholder.svg" 
                     alt={pin.title}
@@ -77,30 +80,30 @@ const MapView = () => {
                     </div>
                     <p className="text-xs text-muted-foreground">{pin.distance}</p>
                   </div>
-                  <Button size="sm" className="w-full mt-2">
+                  <Button size="sm" className="w-full mt-2 pointer-events-auto">
                     Voir
                   </Button>
                 </div>
               </div>
-            </div>
+            </button>
           ))}
         </div>
       </div>
 
-      {/* Legend */}
-      <div className="absolute bottom-6 left-4 bg-card rounded-xl shadow-soft p-4 border border-border">
-        <div className="space-y-2 text-sm">
+      {/* Legend - Mobile optimized */}
+      <div className="absolute bottom-4 sm:bottom-6 left-3 sm:left-4 bg-card rounded-xl shadow-soft p-3 sm:p-4 border border-border text-xs sm:text-sm max-w-[150px] sm:max-w-none">
+        <div className="space-y-1.5 sm:space-y-2">
           <div className="flex items-center gap-2">
-            <div className="w-3 h-3 rounded-full bg-category-food" />
-            <span>Nourriture</span>
+            <div className="w-3 h-3 rounded-full bg-category-food shrink-0" />
+            <span className="truncate">Nourriture</span>
           </div>
           <div className="flex items-center gap-2">
-            <div className="w-3 h-3 rounded-full bg-category-objects" />
-            <span>Objets</span>
+            <div className="w-3 h-3 rounded-full bg-category-objects shrink-0" />
+            <span className="truncate">Objets</span>
           </div>
           <div className="flex items-center gap-2">
-            <div className="w-3 h-3 rounded-full bg-category-clothes" />
-            <span>Vêtements</span>
+            <div className="w-3 h-3 rounded-full bg-category-clothes shrink-0" />
+            <span className="truncate">Vêtements</span>
           </div>
         </div>
       </div>

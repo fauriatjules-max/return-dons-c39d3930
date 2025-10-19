@@ -12,9 +12,9 @@ const AppPage = () => {
   const [activeTab, setActiveTab] = useState<Tab>("map");
 
   return (
-    <div className="h-screen flex flex-col bg-background">
+    <div className="h-screen flex flex-col bg-background overflow-hidden touch-manipulation">
       {/* Main Content */}
-      <main className="flex-1 overflow-hidden">
+      <main className="flex-1 overflow-hidden overscroll-contain">
         {activeTab === "map" && <MapView />}
         {activeTab === "feed" && <FeedView />}
         {activeTab === "publish" && <PublishView />}
@@ -22,27 +22,29 @@ const AppPage = () => {
         {activeTab === "profile" && <ProfileView />}
       </main>
 
-      {/* Bottom Navigation */}
-      <nav className="bg-card border-t border-border shadow-medium">
-        <div className="flex justify-around items-center h-20 px-4 max-w-2xl mx-auto">
+      {/* Bottom Navigation - Fixed with safe area */}
+      <nav className="bg-card border-t border-border shadow-medium safe-bottom">
+        <div className="flex justify-around items-center h-16 sm:h-20 px-2 sm:px-4 max-w-2xl mx-auto">
           {tabs.map((tab) => (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`flex flex-col items-center justify-center gap-1 py-2 px-4 rounded-lg transition-smooth ${
+              className={`flex flex-col items-center justify-center gap-1 py-2 px-3 sm:px-4 rounded-lg transition-smooth min-h-[44px] min-w-[44px] ${
                 activeTab === tab.id
                   ? "text-primary"
-                  : "text-muted-foreground hover:text-foreground"
+                  : "text-muted-foreground active:text-foreground"
               }`}
+              aria-label={tab.label}
+              aria-current={activeTab === tab.id ? "page" : undefined}
             >
               <tab.icon 
-                className={`h-6 w-6 ${
+                className={`h-6 w-6 sm:h-7 sm:w-7 ${
                   activeTab === tab.id && tab.id === "publish" 
                     ? "animate-pulse-soft" 
                     : ""
                 }`} 
               />
-              <span className="text-xs font-medium">{tab.label}</span>
+              <span className="text-[10px] sm:text-xs font-medium">{tab.label}</span>
             </button>
           ))}
         </div>

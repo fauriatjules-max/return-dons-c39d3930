@@ -120,4 +120,22 @@ All colors MUST be HSL.
   .transition-smooth {
     transition: var(--transition-smooth);
   }
+  
+  /* Mobile optimizations */
+  .touch-manipulation {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+  }
+  
+  .-webkit-overflow-scrolling-touch {
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  .overscroll-contain {
+    overscroll-behavior: contain;
+  }
+  
+  .safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
 }
