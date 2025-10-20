@@ -9,10 +9,10 @@ const FeedView = () => {
       {/* Header - Sticky */}
       <div className="sticky top-0 z-10 bg-card border-b border-border backdrop-blur-sm bg-card/95">
         <div className="flex gap-2 sm:gap-4 p-3 sm:p-4 max-w-2xl mx-auto">
-          <Button variant="outline" className="flex-1 h-11 text-sm sm:text-base">
+          <Button variant="outline" className="flex-1 h-11 text-sm sm:text-base transition-all duration-300 hover:scale-105 active:scale-95">
             Pour moi
           </Button>
-          <Button variant="ghost" className="flex-1 h-11 text-sm sm:text-base">
+          <Button variant="ghost" className="flex-1 h-11 text-sm sm:text-base transition-all duration-300 hover:scale-105 active:scale-95">
             Derniers dons
           </Button>
         </div>
@@ -20,10 +20,11 @@ const FeedView = () => {
 
       {/* Feed */}
       <div className="max-w-2xl mx-auto p-3 sm:p-4 space-y-4 sm:space-y-6 pb-6">
-        {mockDonations.map((donation) => (
+        {mockDonations.map((donation, index) => (
           <article 
             key={donation.id} 
-            className="bg-card rounded-xl sm:rounded-2xl shadow-soft border border-border overflow-hidden active:shadow-medium transition-smooth"
+            className="bg-card rounded-xl sm:rounded-2xl shadow-soft border border-border overflow-hidden transition-all duration-300 hover:shadow-medium hover:scale-[1.02] active:scale-[0.98] animate-fade-in"
+            style={{ animationDelay: `${index * 100}ms` }}
           >
             {/* Header */}
             <div className="flex items-center gap-2.5 sm:gap-3 p-3 sm:p-4">
@@ -81,18 +82,18 @@ const FeedView = () => {
 
               {/* Actions - Mobile optimized */}
               <div className="flex items-center gap-1 sm:gap-2 pt-2">
-                <Button variant="ghost" size="sm" className="flex-1 h-10 sm:h-9 text-xs sm:text-sm">
-                  <Heart className="h-4 w-4 mr-1 sm:mr-2" />
+                <Button variant="ghost" size="sm" className="flex-1 h-10 sm:h-9 text-xs sm:text-sm transition-all duration-300 hover:scale-105 active:scale-95">
+                  <Heart className="h-4 w-4 mr-1 sm:mr-2 transition-transform duration-300" />
                   <span className="hidden xs:inline">Sauvegarder</span>
                   <span className="xs:hidden">J'aime</span>
                 </Button>
-                <Button variant="ghost" size="sm" className="flex-1 h-10 sm:h-9 text-xs sm:text-sm">
-                  <MessageCircle className="h-4 w-4 mr-1 sm:mr-2" />
+                <Button variant="ghost" size="sm" className="flex-1 h-10 sm:h-9 text-xs sm:text-sm transition-all duration-300 hover:scale-105 active:scale-95">
+                  <MessageCircle className="h-4 w-4 mr-1 sm:mr-2 transition-transform duration-300" />
                   <span className="hidden xs:inline">Message</span>
                   <span className="xs:hidden">Chat</span>
                 </Button>
-                <Button variant="ghost" size="sm" className="h-10 sm:h-9 px-3 text-xs sm:text-sm">
-                  <Share2 className="h-4 w-4" />
+                <Button variant="ghost" size="sm" className="h-10 sm:h-9 px-3 text-xs sm:text-sm transition-all duration-300 hover:scale-110 active:scale-90">
+                  <Share2 className="h-4 w-4 transition-transform duration-300" />
                 </Button>
               </div>
             </div>

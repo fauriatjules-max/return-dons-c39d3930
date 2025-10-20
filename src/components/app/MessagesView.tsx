@@ -21,18 +21,19 @@ const MessagesView = () => {
 
       {/* Conversations List - Touch optimized */}
       <div className="flex-1 overflow-y-auto overscroll-contain -webkit-overflow-scrolling-touch">
-        {conversations.map((conv) => (
+        {conversations.map((conv, index) => (
           <button 
             key={conv.id}
-            className="w-full flex items-center gap-2.5 sm:gap-3 p-3 sm:p-4 active:bg-muted/50 transition-smooth border-b border-border text-left touch-manipulation"
+            className="w-full flex items-center gap-2.5 sm:gap-3 p-3 sm:p-4 transition-all duration-300 hover:bg-muted/30 active:bg-muted/50 hover:scale-[1.02] active:scale-[0.98] border-b border-border text-left touch-manipulation animate-fade-in"
+            style={{ animationDelay: `${index * 50}ms` }}
           >
             <div className="relative shrink-0">
-              <Avatar className="h-11 w-11 sm:h-12 sm:w-12">
+              <Avatar className="h-11 w-11 sm:h-12 sm:w-12 transition-transform duration-300 hover:scale-110">
                 <AvatarImage src={conv.avatar} />
                 <AvatarFallback className="text-base">{conv.name[0]}</AvatarFallback>
               </Avatar>
               {conv.unread > 0 && (
-                <Badge className="absolute -top-0.5 -right-0.5 h-5 w-5 p-0 flex items-center justify-center bg-secondary text-white text-[10px] border-2 border-background">
+                <Badge className="absolute -top-0.5 -right-0.5 h-5 w-5 p-0 flex items-center justify-center bg-secondary text-white text-[10px] border-2 border-background animate-scale-in">
                   {conv.unread}
                 </Badge>
               )}

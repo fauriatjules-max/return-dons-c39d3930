@@ -45,9 +45,9 @@ const PublishView = () => {
             {/* Photos - Touch optimized */}
             <button
               type="button"
-              className="w-full border-2 border-dashed border-border rounded-xl p-6 sm:p-8 text-center active:border-primary transition-smooth"
+              className="w-full border-2 border-dashed border-border rounded-xl p-6 sm:p-8 text-center transition-all duration-300 hover:border-primary/50 active:border-primary hover:bg-primary/5 active:scale-[0.98]"
             >
-              <Camera className="h-10 w-10 sm:h-12 sm:w-12 mx-auto mb-2 sm:mb-3 text-muted-foreground" />
+              <Camera className="h-10 w-10 sm:h-12 sm:w-12 mx-auto mb-2 sm:mb-3 text-muted-foreground transition-transform duration-300 hover:scale-110" />
               <p className="text-sm font-medium mb-1">+ Ajouter photos</p>
               <p className="text-xs text-muted-foreground">Jusqu'à 5 photos</p>
             </button>
@@ -62,13 +62,13 @@ const PublishView = () => {
                   key={cat.id}
                   type="button"
                   onClick={() => setSelectedCategory(cat.id)}
-                  className={`p-3 sm:p-4 rounded-xl border-2 transition-smooth touch-manipulation min-h-[80px] sm:min-h-0 ${
+                  className={`p-3 sm:p-4 rounded-xl border-2 transition-all duration-300 touch-manipulation min-h-[80px] sm:min-h-0 hover:scale-105 active:scale-95 ${
                     selectedCategory === cat.id
-                      ? "border-primary bg-primary/5"
+                      ? "border-primary bg-primary/5 scale-105"
                       : "border-border active:border-primary/50"
                   }`}
                 >
-                  <div className="text-2xl sm:text-3xl mb-1 sm:mb-2">{cat.icon}</div>
+                  <div className={`text-2xl sm:text-3xl mb-1 sm:mb-2 transition-transform duration-300 ${selectedCategory === cat.id ? 'scale-110' : ''}`}>{cat.icon}</div>
                   <div className="text-xs sm:text-sm font-medium leading-tight">{cat.label}</div>
                 </button>
               ))}
@@ -80,8 +80,8 @@ const PublishView = () => {
             <Label className="text-base sm:text-lg font-heading">Où ?</Label>
             <RadioGroup value={locationType} onValueChange={setLocationType}>
               <div className="space-y-2 sm:space-y-3">
-                <div className={`flex items-start space-x-2.5 sm:space-x-3 p-3 sm:p-4 rounded-xl border-2 transition-smooth touch-manipulation ${
-                  locationType === "anonymous" ? "border-primary bg-primary/5" : "border-border"
+                <div className={`flex items-start space-x-2.5 sm:space-x-3 p-3 sm:p-4 rounded-xl border-2 transition-all duration-300 touch-manipulation cursor-pointer hover:scale-[1.02] active:scale-[0.98] ${
+                  locationType === "anonymous" ? "border-primary bg-primary/5 scale-[1.02]" : "border-border hover:border-primary/30"
                 }`}>
                   <RadioGroupItem value="anonymous" id="anonymous" className="mt-0.5 sm:mt-1 shrink-0" />
                   <div className="flex-1 space-y-1 min-w-0">
@@ -94,8 +94,8 @@ const PublishView = () => {
                   </div>
                 </div>
 
-                <div className={`flex items-start space-x-2.5 sm:space-x-3 p-3 sm:p-4 rounded-xl border-2 transition-smooth touch-manipulation ${
-                  locationType === "home" ? "border-primary bg-primary/5" : "border-border"
+                <div className={`flex items-start space-x-2.5 sm:space-x-3 p-3 sm:p-4 rounded-xl border-2 transition-all duration-300 touch-manipulation cursor-pointer hover:scale-[1.02] active:scale-[0.98] ${
+                  locationType === "home" ? "border-primary bg-primary/5 scale-[1.02]" : "border-border hover:border-primary/30"
                 }`}>
                   <RadioGroupItem value="home" id="home" className="mt-0.5 sm:mt-1 shrink-0" />
                   <div className="flex-1 space-y-1 min-w-0">
@@ -113,9 +113,9 @@ const PublishView = () => {
             {locationType === "anonymous" && (
               <button
                 type="button"
-                className="w-full bg-muted/50 rounded-xl p-5 sm:p-6 flex items-center justify-center gap-2.5 sm:gap-3 text-muted-foreground active:bg-muted transition-smooth"
+                className="w-full bg-muted/50 rounded-xl p-5 sm:p-6 flex items-center justify-center gap-2.5 sm:gap-3 text-muted-foreground transition-all duration-300 hover:bg-muted/70 active:bg-muted hover:scale-[1.02] active:scale-[0.98] animate-fade-in"
               >
-                <MapPin className="h-5 w-5 shrink-0" />
+                <MapPin className="h-5 w-5 shrink-0 transition-transform duration-300" />
                 <span className="text-sm">Placer sur la carte</span>
               </button>
             )}
@@ -139,7 +139,7 @@ const PublishView = () => {
               type="button"
               onClick={handlePublish}
               size="lg" 
-              className="w-full shadow-primary h-12 sm:h-11 text-base"
+              className="w-full shadow-primary h-12 sm:h-11 text-base transition-all duration-300 hover:scale-105 active:scale-95 hover:shadow-lg"
             >
               Publier mon don
             </Button>

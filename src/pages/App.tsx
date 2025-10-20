@@ -14,12 +14,22 @@ const AppPage = () => {
   return (
     <div className="h-screen flex flex-col bg-background overflow-hidden touch-manipulation">
       {/* Main Content */}
-      <main className="flex-1 overflow-hidden overscroll-contain">
-        {activeTab === "map" && <MapView />}
-        {activeTab === "feed" && <FeedView />}
-        {activeTab === "publish" && <PublishView />}
-        {activeTab === "messages" && <MessagesView />}
-        {activeTab === "profile" && <ProfileView />}
+      <main className="flex-1 overflow-hidden overscroll-contain relative">
+        <div className={`absolute inset-0 transition-all duration-300 ${activeTab === "map" ? "opacity-100 translate-x-0" : "opacity-0 translate-x-full pointer-events-none"}`}>
+          <MapView />
+        </div>
+        <div className={`absolute inset-0 transition-all duration-300 ${activeTab === "feed" ? "opacity-100 translate-x-0" : "opacity-0 translate-x-full pointer-events-none"}`}>
+          <FeedView />
+        </div>
+        <div className={`absolute inset-0 transition-all duration-300 ${activeTab === "publish" ? "opacity-100 scale-100" : "opacity-0 scale-95 pointer-events-none"}`}>
+          <PublishView />
+        </div>
+        <div className={`absolute inset-0 transition-all duration-300 ${activeTab === "messages" ? "opacity-100 translate-x-0" : "opacity-0 translate-x-full pointer-events-none"}`}>
+          <MessagesView />
+        </div>
+        <div className={`absolute inset-0 transition-all duration-300 ${activeTab === "profile" ? "opacity-100 translate-x-0" : "opacity-0 translate-x-full pointer-events-none"}`}>
+          <ProfileView />
+        </div>
       </main>
 
       {/* Bottom Navigation - Fixed with safe area */}
@@ -29,22 +39,26 @@ const AppPage = () => {
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`flex flex-col items-center justify-center gap-1 py-2 px-3 sm:px-4 rounded-lg transition-smooth min-h-[44px] min-w-[44px] ${
+              className={`flex flex-col items-center justify-center gap-1 py-2 px-3 sm:px-4 rounded-lg transition-all duration-300 min-h-[44px] min-w-[44px] ${
                 activeTab === tab.id
-                  ? "text-primary"
-                  : "text-muted-foreground active:text-foreground"
+                  ? "text-primary scale-110 bg-primary/5"
+                  : "text-muted-foreground active:text-foreground active:scale-95"
               }`}
               aria-label={tab.label}
               aria-current={activeTab === tab.id ? "page" : undefined}
             >
               <tab.icon 
-                className={`h-6 w-6 sm:h-7 sm:w-7 ${
-                  activeTab === tab.id && tab.id === "publish" 
-                    ? "animate-pulse-soft" 
-                    : ""
+                className={`h-6 w-6 sm:h-7 sm:w-7 transition-all duration-300 ${
+                  activeTab === tab.id 
+                    ? tab.id === "publish" 
+                      ? "animate-pulse-soft scale-110" 
+                      : "scale-110"
+                    : "scale-100"
                 }`} 
               />
-              <span className="text-[10px] sm:text-xs font-medium">{tab.label}</span>
+              <span className={`text-[10px] sm:text-xs font-medium transition-all duration-300 ${
+                activeTab === tab.id ? "opacity-100" : "opacity-70"
+              }`}>{tab.label}</span>
             </button>
           ))}
         </div>

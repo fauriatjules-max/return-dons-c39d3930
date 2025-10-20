@@ -39,12 +39,13 @@ const ProfileView = () => {
 
         {/* Stats - Mobile optimized */}
         <div className="grid grid-cols-3 gap-2 sm:gap-4 p-3 sm:p-6">
-          {stats.map((stat) => (
+          {stats.map((stat, index) => (
             <div 
               key={stat.label}
-              className="bg-card rounded-xl p-3 sm:p-4 text-center shadow-soft border border-border"
+              className="bg-card rounded-xl p-3 sm:p-4 text-center shadow-soft border border-border transition-all duration-300 hover:shadow-medium hover:scale-105 active:scale-95 animate-fade-in"
+              style={{ animationDelay: `${index * 100}ms` }}
             >
-              <div className="text-2xl sm:text-3xl font-heading font-bold text-primary mb-0.5 sm:mb-1">
+              <div className="text-2xl sm:text-3xl font-heading font-bold text-primary mb-0.5 sm:mb-1 transition-transform duration-300">
                 {stat.value}
               </div>
               <div className="text-[10px] sm:text-xs text-muted-foreground leading-tight">
@@ -76,13 +77,14 @@ const ProfileView = () => {
 
         {/* Menu - Touch optimized */}
         <div className="px-3 sm:px-6 pb-4 sm:pb-6 space-y-1 sm:space-y-2">
-          {menuItems.map((item) => (
+          {menuItems.map((item, index) => (
             <Button
               key={item.label}
               variant="ghost"
-              className="w-full justify-start gap-2.5 sm:gap-3 h-12 sm:h-14 text-sm sm:text-base touch-manipulation"
+              className="w-full justify-start gap-2.5 sm:gap-3 h-12 sm:h-14 text-sm sm:text-base touch-manipulation transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] hover:bg-muted/50 animate-fade-in"
+              style={{ animationDelay: `${(index + 3) * 50}ms` }}
             >
-              <item.icon className="h-5 w-5 text-muted-foreground shrink-0" />
+              <item.icon className="h-5 w-5 text-muted-foreground shrink-0 transition-transform duration-300 group-hover:scale-110" />
               <span>{item.label}</span>
             </Button>
           ))}

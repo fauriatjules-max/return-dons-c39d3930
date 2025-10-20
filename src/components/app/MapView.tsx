@@ -40,33 +40,34 @@ const MapView = () => {
         <Button 
           size="icon" 
           variant="outline"
-          className="bg-card shadow-soft h-11 w-11 sm:h-10 sm:w-10"
+          className="bg-card shadow-soft h-11 w-11 sm:h-10 sm:w-10 transition-all duration-300 hover:scale-110 active:scale-95"
           onClick={() => setViewMode(viewMode === "standard" ? "satellite" : "standard")}
           aria-label="Changer de vue"
         >
-          <Layers className="h-5 w-5" />
+          <Layers className="h-5 w-5 transition-transform duration-300" />
         </Button>
       </div>
 
       {/* Mock Pins - Touch optimized */}
       <div className="absolute inset-0 flex items-center justify-center p-4">
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-8 sm:gap-16">
-          {mockPins.map((pin) => (
+          {mockPins.map((pin, index) => (
             <button
               key={pin.id}
-              className="relative group touch-manipulation active:scale-95 transition-smooth"
+              className="relative group touch-manipulation transition-all duration-300 hover:scale-125 active:scale-90 animate-fade-in"
+              style={{ animationDelay: `${index * 100}ms` }}
               aria-label={`Don: ${pin.title}`}
             >
               <div 
-                className="w-14 h-14 sm:w-12 sm:h-12 rounded-full flex items-center justify-center shadow-medium transition-smooth active:scale-110"
+                className="w-14 h-14 sm:w-12 sm:h-12 rounded-full flex items-center justify-center shadow-medium transition-all duration-300 group-hover:shadow-primary"
                 style={{ backgroundColor: pin.color }}
               >
-                <span className="text-3xl sm:text-2xl">🎁</span>
+                <span className="text-3xl sm:text-2xl transition-transform duration-300 group-hover:scale-110">🎁</span>
               </div>
               
               {/* Tooltip - Touch optimized */}
-              <div className="absolute top-full mt-2 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 group-active:opacity-100 transition-smooth pointer-events-none z-20">
-                <div className="bg-card rounded-xl shadow-medium p-3 w-[240px] sm:min-w-[200px] border border-border">
+              <div className="absolute top-full mt-2 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 group-active:opacity-100 transition-all duration-300 pointer-events-none z-20 scale-95 group-hover:scale-100 group-active:scale-100">
+                <div className="bg-card rounded-xl shadow-medium p-3 w-[240px] sm:min-w-[200px] border border-border animate-scale-in">
                   <img 
                     src="/placeholder.svg" 
                     alt={pin.title}
@@ -80,7 +81,7 @@ const MapView = () => {
                     </div>
                     <p className="text-xs text-muted-foreground">{pin.distance}</p>
                   </div>
-                  <Button size="sm" className="w-full mt-2 pointer-events-auto">
+                  <Button size="sm" className="w-full mt-2 pointer-events-auto transition-all duration-300 hover:scale-105 active:scale-95">
                     Voir
                   </Button>
                 </div>
