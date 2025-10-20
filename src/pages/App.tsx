@@ -12,9 +12,11 @@ const AppPage = () => {
   const [activeTab, setActiveTab] = useState<Tab>("map");
 
   return (
-    <div className="h-screen flex flex-col bg-background overflow-hidden touch-manipulation">
-      {/* Main Content */}
-      <main className="flex-1 overflow-hidden overscroll-contain relative">
+    <div className="min-h-screen w-full flex items-center justify-center bg-muted/30">
+      {/* Mobile Container 9:16 format */}
+      <div className="h-screen w-full max-w-[56.25vh] bg-background overflow-hidden touch-manipulation flex flex-col shadow-2xl">
+        {/* Main Content */}
+        <main className="flex-1 overflow-hidden overscroll-contain relative">
         <div className={`absolute inset-0 transition-all duration-300 ${activeTab === "map" ? "opacity-100 translate-x-0" : "opacity-0 translate-x-full pointer-events-none"}`}>
           <MapView />
         </div>
@@ -63,6 +65,7 @@ const AppPage = () => {
           ))}
         </div>
       </nav>
+      </div>
     </div>
   );
 };
