@@ -14,16 +14,213 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      categories: {
+        Row: {
+          created_at: string
+          icon: string
+          id: string
+          label: string
+        }
+        Insert: {
+          created_at?: string
+          icon: string
+          id?: string
+          label: string
+        }
+        Update: {
+          created_at?: string
+          icon?: string
+          id?: string
+          label?: string
+        }
+        Relationships: []
+      }
+      donations: {
+        Row: {
+          category_id: string
+          completed_at: string | null
+          created_at: string
+          description: string
+          id: string
+          location_address: string | null
+          location_lat: number | null
+          location_lng: number | null
+          location_type: Database["public"]["Enums"]["location_type"]
+          photo_urls: string[] | null
+          reserved_at: string | null
+          reserved_by: string | null
+          status: Database["public"]["Enums"]["donation_status"]
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          category_id: string
+          completed_at?: string | null
+          created_at?: string
+          description: string
+          id?: string
+          location_address?: string | null
+          location_lat?: number | null
+          location_lng?: number | null
+          location_type?: Database["public"]["Enums"]["location_type"]
+          photo_urls?: string[] | null
+          reserved_at?: string | null
+          reserved_by?: string | null
+          status?: Database["public"]["Enums"]["donation_status"]
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          category_id?: string
+          completed_at?: string | null
+          created_at?: string
+          description?: string
+          id?: string
+          location_address?: string | null
+          location_lat?: number | null
+          location_lng?: number | null
+          location_type?: Database["public"]["Enums"]["location_type"]
+          photo_urls?: string[] | null
+          reserved_at?: string | null
+          reserved_by?: string | null
+          status?: Database["public"]["Enums"]["donation_status"]
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "donations_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "categories"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      messages: {
+        Row: {
+          content: string
+          created_at: string
+          donation_id: string
+          id: string
+          read: boolean | null
+          receiver_id: string
+          sender_id: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          donation_id: string
+          id?: string
+          read?: boolean | null
+          receiver_id: string
+          sender_id: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          donation_id?: string
+          id?: string
+          read?: boolean | null
+          receiver_id?: string
+          sender_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "messages_donation_id_fkey"
+            columns: ["donation_id"]
+            isOneToOne: false
+            referencedRelation: "donations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          bio: string | null
+          co2_saved: number | null
+          created_at: string
+          display_name: string
+          dons_offerts: number | null
+          dons_recus: number | null
+          id: string
+          rating: number | null
+          updated_at: string
+          user_id: string
+          valeur_partagee: number | null
+        }
+        Insert: {
+          avatar_url?: string | null
+          bio?: string | null
+          co2_saved?: number | null
+          created_at?: string
+          display_name: string
+          dons_offerts?: number | null
+          dons_recus?: number | null
+          id?: string
+          rating?: number | null
+          updated_at?: string
+          user_id: string
+          valeur_partagee?: number | null
+        }
+        Update: {
+          avatar_url?: string | null
+          bio?: string | null
+          co2_saved?: number | null
+          created_at?: string
+          display_name?: string
+          dons_offerts?: number | null
+          dons_recus?: number | null
+          id?: string
+          rating?: number | null
+          updated_at?: string
+          user_id?: string
+          valeur_partagee?: number | null
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "moderator" | "user"
+      donation_status: "disponible" | "reserve" | "donne"
+      location_type: "precise" | "anonymous"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +347,10 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "moderator", "user"],
+      donation_status: ["disponible", "reserve", "donne"],
+      location_type: ["precise", "anonymous"],
+    },
   },
 } as const
