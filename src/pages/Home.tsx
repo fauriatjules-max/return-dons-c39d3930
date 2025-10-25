@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { Heart, MapPin, Users, Leaf } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import heroImage from "@/assets/hero-sharing.jpg";
+import logo from "@/assets/logo-return-dons.png";
 
 const Home = () => {
   return (
@@ -12,14 +13,25 @@ const Home = () => {
         <div className="relative container mx-auto px-4 py-12 sm:py-16 md:py-24">
           <div className="grid md:grid-cols-2 gap-8 sm:gap-12 items-center">
             <div className="space-y-5 sm:space-y-6 animate-fade-in">
-              <div className="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 bg-primary/10 rounded-full">
-                <Leaf className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-primary" />
-                <span className="text-xs sm:text-sm font-medium text-primary">Donnez, Partagez, Agissez</span>
+              <div className="flex items-center gap-4 mb-6">
+                <img 
+                  src={logo} 
+                  alt="return.dons logo" 
+                  className="w-16 h-16 sm:w-20 sm:h-20 animate-scale-in"
+                />
+                <div className="text-left">
+                  <h1 className="text-3xl sm:text-4xl md:text-5xl font-heading font-bold text-primary">
+                    return.dons
+                  </h1>
+                  <p className="text-sm sm:text-base text-muted-foreground font-medium">
+                    Donnez, Partagez, Agissez
+                  </p>
+                </div>
               </div>
-              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-heading font-bold leading-tight">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-heading font-bold leading-tight">
                 Transformez vos objets en{" "}
                 <span className="text-primary">solidarité</span>
-              </h1>
+              </h2>
               <p className="text-base sm:text-lg text-muted-foreground leading-relaxed">
                 Découvrez des dons près de chez vous. Donnez une seconde vie à vos objets. 
                 Rejoignez une communauté engagée pour un monde plus durable.
