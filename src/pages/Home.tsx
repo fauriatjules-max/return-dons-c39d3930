@@ -38,13 +38,13 @@ const Home = () => {
               </p>
               <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
                 <Button asChild size="lg" className="shadow-primary h-12 text-base">
-                  <Link to="/app">
+                  <Link to="/auth">
                     <MapPin className="mr-2 h-5 w-5" />
                     Explorer la carte
                   </Link>
                 </Button>
                 <Button asChild size="lg" variant="outline" className="h-12 text-base">
-                  <Link to="/app">
+                  <Link to="/auth">
                     <Heart className="mr-2 h-5 w-5" />
                     Publier un don
                   </Link>
@@ -125,7 +125,7 @@ const Home = () => {
               Des milliers de personnes partagent déjà leurs objets et font vivre l'économie circulaire
             </p>
             <Button asChild size="lg" className="shadow-primary h-12 text-base">
-              <Link to="/app">
+              <Link to="/auth">
                 Commencer maintenant
               </Link>
             </Button>

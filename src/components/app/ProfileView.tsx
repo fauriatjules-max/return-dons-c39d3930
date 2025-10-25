@@ -2,8 +2,35 @@ import { Settings, Heart, Package, TrendingUp, LogOut, HelpCircle } from "lucide
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { useAuth } from "@/hooks/useAuth";
+import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 const ProfileView = () => {
+  const { user, signOut } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    try {
+      await signOut();
+      toast.success("Déconnexion réussie");
+      navigate("/");
+    } catch (error) {
+      toast.error("Erreur lors de la déconnexion");
+    }
+  };
+
+  const displayName = user?.user_metadata?.display_name || user?.email?.split('@')[0] || "Utilisateur";
+  const initials = displayName.substring(0, 2).toUpperCase();
+
+  const menuItems = [
+    { label: "Mes dons en cours", icon: Package, action: () => {} },
+    { label: "Mes favoris", icon: Heart, action: () => {} },
+    { label: "Paramètres", icon: Settings, action: () => {} },
+    { label: "Aide & Support", icon: HelpCircle, action: () => {} },
+    { label: "Se déconnecter", icon: LogOut, action: handleLogout }
+  ];
+
   return (
     <div className="h-full overflow-y-auto bg-background overscroll-contain -webkit-overflow-scrolling-touch">
       <div className="max-w-2xl mx-auto pb-6">
@@ -11,12 +38,12 @@ const ProfileView = () => {
         <div className="bg-gradient-to-br from-primary/10 via-background to-secondary/10 p-6 sm:p-8">
           <div className="flex flex-col items-center text-center space-y-3 sm:space-y-4">
             <Avatar className="h-20 w-20 sm:h-24 sm:w-24 border-4 border-card shadow-medium">
-              <AvatarImage src="/placeholder.svg" />
-              <AvatarFallback className="text-xl sm:text-2xl">ML</AvatarFallback>
+              <AvatarImage src={user?.user_metadata?.avatar_url} />
+              <AvatarFallback className="text-xl sm:text-2xl">{initials}</AvatarFallback>
             </Avatar>
             <div>
-              <h2 className="text-xl sm:text-2xl font-heading font-bold">Marie L.</h2>
-              <p className="text-sm text-muted-foreground">Membre depuis 2024</p>
+              <h2 className="text-xl sm:text-2xl font-heading font-bold">{displayName}</h2>
+              <p className="text-sm text-muted-foreground">Membre depuis {new Date(user?.created_at || Date.now()).getFullYear()}</p>
             </div>
             <div className="flex items-center gap-2">
               <div className="flex">
@@ -81,6 +108,7 @@ const ProfileView = () => {
             <Button
               key={item.label}
               variant="ghost"
+              onClick={item.action}
               className="w-full justify-start gap-2.5 sm:gap-3 h-12 sm:h-14 text-sm sm:text-base touch-manipulation transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] hover:bg-muted/50 animate-fade-in"
               style={{ animationDelay: `${(index + 3) * 50}ms` }}
             >
@@ -98,14 +126,6 @@ const stats = [
   { label: "Dons publiés", value: "12" },
   { label: "Dons reçus", value: "8" },
   { label: "Échanges", value: "20" }
-];
-
-const menuItems = [
-  { label: "Mes dons en cours", icon: Package },
-  { label: "Mes favoris", icon: Heart },
-  { label: "Paramètres", icon: Settings },
-  { label: "Aide & Support", icon: HelpCircle },
-  { label: "Se déconnecter", icon: LogOut }
 ];
 
 export default ProfileView;

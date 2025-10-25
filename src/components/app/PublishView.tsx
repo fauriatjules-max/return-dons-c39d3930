@@ -6,15 +6,67 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { toast } from "sonner";
+import { z } from "zod";
+
+const donationSchema = z.object({
+  title: z.string()
+    .trim()
+    .min(5, { message: "Le titre doit contenir au moins 5 caractères" })
+    .max(100, { message: "Le titre ne peut pas dépasser 100 caractères" }),
+  description: z.string()
+    .trim()
+    .min(10, { message: "La description doit contenir au moins 10 caractères" })
+    .max(1000, { message: "La description ne peut pas dépasser 1000 caractères" }),
+  category: z.string()
+    .min(1, { message: "Veuillez sélectionner une catégorie" }),
+  locationType: z.enum(["anonymous", "home"]),
+});
 
 const PublishView = () => {
   const [selectedCategory, setSelectedCategory] = useState("");
   const [locationType, setLocationType] = useState("anonymous");
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [errors, setErrors] = useState<Record<string, string>>({});
 
-  const handlePublish = () => {
-    toast.success("Don publié avec succès !", {
-      description: "Votre don est maintenant visible par la communauté"
-    });
+  const handlePublish = (e: React.FormEvent) => {
+    e.preventDefault();
+    setErrors({});
+
+    try {
+      const validated = donationSchema.parse({
+        title,
+        description,
+        category: selectedCategory,
+        locationType,
+      });
+
+      // TODO: Save to database when backend integration is complete
+      console.log("Validated donation data:", validated);
+      
+      toast.success("Don publié avec succès !", {
+        description: "Votre don est maintenant visible par la communauté"
+      });
+
+      // Reset form
+      setTitle("");
+      setDescription("");
+      setSelectedCategory("");
+      setLocationType("anonymous");
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        const fieldErrors: Record<string, string> = {};
+        error.errors.forEach((err) => {
+          if (err.path[0]) {
+            fieldErrors[err.path[0].toString()] = err.message;
+          }
+        });
+        setErrors(fieldErrors);
+        toast.error("Erreur de validation", {
+          description: error.errors[0].message
+        });
+      }
+    }
   };
 
   return (
@@ -27,7 +79,7 @@ const PublishView = () => {
           </p>
         </div>
 
-        <form className="space-y-6 sm:space-y-8">
+        <form onSubmit={handlePublish} className="space-y-6 sm:space-y-8">
           {/* What */}
           <div className="space-y-3 sm:space-y-4">
             <div className="space-y-2">
@@ -37,9 +89,15 @@ const PublishView = () => {
               <Input 
                 id="title"
                 placeholder="Ex: Canapé 3 places"
-                className="text-base h-11 sm:h-10"
+                className={`text-base h-11 sm:h-10 ${errors.title ? 'border-red-500' : ''}`}
                 inputMode="text"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                maxLength={100}
               />
+              {errors.title && (
+                <p className="text-sm text-red-500">{errors.title}</p>
+              )}
             </div>
 
             {/* Photos - Touch optimized */}
@@ -56,6 +114,9 @@ const PublishView = () => {
           {/* Category - Mobile optimized grid */}
           <div className="space-y-3 sm:space-y-4">
             <Label className="text-base sm:text-lg font-heading">Catégorie</Label>
+            {errors.category && (
+              <p className="text-sm text-red-500">{errors.category}</p>
+            )}
             <div className="grid grid-cols-3 gap-2 sm:gap-3">
               {categories.map((cat) => (
                 <button
@@ -129,15 +190,23 @@ const PublishView = () => {
             <Textarea 
               id="description"
               placeholder="Décrivez votre don..."
-              className="min-h-[100px] sm:min-h-[120px] text-base resize-none"
+              className={`min-h-[100px] sm:min-h-[120px] text-base resize-none ${errors.description ? 'border-red-500' : ''}`}
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              maxLength={1000}
             />
+            {errors.description && (
+              <p className="text-sm text-red-500">{errors.description}</p>
+            )}
+            <p className="text-xs text-muted-foreground">
+              {description.length}/1000 caractères
+            </p>
           </div>
 
           {/* Submit - Fixed on mobile */}
           <div className="sticky bottom-0 -mx-4 sm:mx-0 -mb-8 sm:mb-0 p-4 sm:p-0 bg-background sm:bg-transparent border-t sm:border-0 border-border">
             <Button 
-              type="button"
-              onClick={handlePublish}
+              type="submit"
               size="lg" 
               className="w-full shadow-primary h-12 sm:h-11 text-base transition-all duration-300 hover:scale-105 active:scale-95 hover:shadow-lg"
             >
