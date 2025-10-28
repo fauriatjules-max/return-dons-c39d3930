@@ -2,7 +2,6 @@ import { Link } from "react-router-dom";
 import { Heart, MapPin, Users, Leaf } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import heroImage from "@/assets/hero-sharing.jpg";
-import logo from "@/assets/logo-return-dons.png";
 
 const Home = () => {
   return (
@@ -13,20 +12,19 @@ const Home = () => {
         <div className="relative container mx-auto px-4 py-12 sm:py-16 md:py-24">
           <div className="grid md:grid-cols-2 gap-8 sm:gap-12 items-center">
             <div className="space-y-5 sm:space-y-6 animate-fade-in">
-              <div className="flex items-center gap-4 mb-6">
-                <img 
-                  src={logo} 
-                  alt="return.dons logo" 
-                  className="w-16 h-16 sm:w-20 sm:h-20 animate-scale-in"
-                />
-                <div className="text-left">
-                  <h1 className="text-3xl sm:text-4xl md:text-5xl font-heading font-bold text-primary">
-                    return.dons
-                  </h1>
-                  <p className="text-sm sm:text-base text-muted-foreground font-medium">
-                    Donnez, Partagez, Agissez
-                  </p>
-                </div>
+              <div className="mb-6">
+                <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-heading font-bold mb-2 animate-scale-in">
+                  <span className="bg-gradient-to-r from-primary via-primary/80 to-secondary bg-clip-text text-transparent">
+                    return
+                  </span>
+                  <span className="text-primary">.</span>
+                  <span className="bg-gradient-to-r from-secondary via-secondary/80 to-primary bg-clip-text text-transparent">
+                    dons
+                  </span>
+                </h1>
+                <p className="text-sm sm:text-base md:text-lg text-muted-foreground font-medium tracking-wider">
+                  Donnez, Partagez, Agissez
+                </p>
               </div>
               <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-heading font-bold leading-tight">
                 Transformez vos objets en{" "}
