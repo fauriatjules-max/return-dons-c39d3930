@@ -1,14 +1,18 @@
-import { Settings, Heart, Package, TrendingUp, LogOut, HelpCircle } from "lucide-react";
+import { Settings, Heart, Package, TrendingUp, LogOut, HelpCircle, Bell } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { NotificationSettings } from "@/components/app/NotificationSettings";
 import { useAuth } from "@/hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+import { useState } from "react";
 
 const ProfileView = () => {
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
+  const [notificationSettingsOpen, setNotificationSettingsOpen] = useState(false);
 
   const handleLogout = async () => {
     try {
@@ -26,6 +30,7 @@ const ProfileView = () => {
   const menuItems = [
     { label: "Mes dons en cours", icon: Package, action: () => {} },
     { label: "Mes favoris", icon: Heart, action: () => {} },
+    { label: "Notifications", icon: Bell, action: () => setNotificationSettingsOpen(true) },
     { label: "Paramètres", icon: Settings, action: () => {} },
     { label: "Aide & Support", icon: HelpCircle, action: () => {} },
     { label: "Se déconnecter", icon: LogOut, action: handleLogout }
@@ -118,6 +123,13 @@ const ProfileView = () => {
           ))}
         </div>
       </div>
+
+      {/* Notification Settings Sheet */}
+      <Sheet open={notificationSettingsOpen} onOpenChange={setNotificationSettingsOpen}>
+        <SheetContent side="bottom" className="h-[85vh] p-0">
+          <NotificationSettings />
+        </SheetContent>
+      </Sheet>
     </div>
   );
 };

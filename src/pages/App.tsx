@@ -1,15 +1,18 @@
 import { useState } from "react";
-import { Map, Grid3x3, PlusCircle, MessageCircle, User } from "lucide-react";
+import { Map, Grid3x3, PlusCircle, MessageCircle, User, Bell } from "lucide-react";
 import MapView from "@/components/app/MapView";
 import FeedView from "@/components/app/FeedView";
 import PublishView from "@/components/app/PublishView";
 import MessagesView from "@/components/app/MessagesView";
 import ProfileView from "@/components/app/ProfileView";
+import { NotificationsList } from "@/components/app/NotificationsList";
+import { useNotifications } from "@/hooks/useNotifications";
 
-type Tab = "map" | "feed" | "publish" | "messages" | "profile";
+type Tab = "map" | "feed" | "publish" | "messages" | "profile" | "notifications";
 
 const AppPage = () => {
   const [activeTab, setActiveTab] = useState<Tab>("map");
+  const { unreadCount } = useNotifications();
 
   return (
     <div className="min-h-screen w-full flex items-center justify-center bg-muted/30">
@@ -28,6 +31,9 @@ const AppPage = () => {
         </div>
         <div className={`absolute inset-0 transition-all duration-300 ${activeTab === "messages" ? "opacity-100 translate-x-0" : "opacity-0 translate-x-full pointer-events-none"}`}>
           <MessagesView />
+        </div>
+        <div className={`absolute inset-0 transition-all duration-300 ${activeTab === "notifications" ? "opacity-100 translate-x-0" : "opacity-0 translate-x-full pointer-events-none"}`}>
+          <NotificationsList />
         </div>
         <div className={`absolute inset-0 transition-all duration-300 ${activeTab === "profile" ? "opacity-100 translate-x-0" : "opacity-0 translate-x-full pointer-events-none"}`}>
           <ProfileView />
@@ -49,15 +55,22 @@ const AppPage = () => {
               aria-label={tab.label}
               aria-current={activeTab === tab.id ? "page" : undefined}
             >
-              <tab.icon 
-                className={`h-6 w-6 sm:h-7 sm:w-7 transition-all duration-300 ${
-                  activeTab === tab.id 
-                    ? tab.id === "publish" 
-                      ? "animate-pulse-soft scale-110" 
-                      : "scale-110"
-                    : "scale-100"
-                }`} 
-              />
+              <div className="relative">
+                <tab.icon 
+                  className={`h-6 w-6 sm:h-7 sm:w-7 transition-all duration-300 ${
+                    activeTab === tab.id 
+                      ? tab.id === "publish" 
+                        ? "animate-pulse-soft scale-110" 
+                        : "scale-110"
+                      : "scale-100"
+                  }`} 
+                />
+                {tab.id === "notifications" && unreadCount > 0 && (
+                  <span className="absolute -top-1 -right-1 bg-secondary text-secondary-foreground text-[10px] font-bold rounded-full min-w-[18px] h-[18px] flex items-center justify-center px-1 animate-scale-in">
+                    {unreadCount > 99 ? '99+' : unreadCount}
+                  </span>
+                )}
+              </div>
               <span className={`text-[10px] sm:text-xs font-medium transition-all duration-300 ${
                 activeTab === tab.id ? "opacity-100" : "opacity-70"
               }`}>{tab.label}</span>
@@ -74,6 +87,7 @@ const tabs = [
   { id: "map" as Tab, label: "Carte", icon: Map },
   { id: "feed" as Tab, label: "Flux", icon: Grid3x3 },
   { id: "publish" as Tab, label: "Publier", icon: PlusCircle },
+  { id: "notifications" as Tab, label: "Alertes", icon: Bell },
   { id: "messages" as Tab, label: "Messages", icon: MessageCircle },
   { id: "profile" as Tab, label: "Profil", icon: User },
 ];
