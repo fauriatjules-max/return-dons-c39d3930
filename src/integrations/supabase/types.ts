@@ -106,6 +106,10 @@ export type Database = {
           created_at: string
           donation_id: string
           id: string
+          location_lat: number | null
+          location_lng: number | null
+          location_name: string | null
+          photo_url: string | null
           read: boolean | null
           receiver_id: string
           sender_id: string
@@ -115,6 +119,10 @@ export type Database = {
           created_at?: string
           donation_id: string
           id?: string
+          location_lat?: number | null
+          location_lng?: number | null
+          location_name?: string | null
+          photo_url?: string | null
           read?: boolean | null
           receiver_id: string
           sender_id: string
@@ -124,6 +132,10 @@ export type Database = {
           created_at?: string
           donation_id?: string
           id?: string
+          location_lat?: number | null
+          location_lng?: number | null
+          location_name?: string | null
+          photo_url?: string | null
           read?: boolean | null
           receiver_id?: string
           sender_id?: string
@@ -296,7 +308,24 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      conversations: {
+        Row: {
+          donation_id: string | null
+          last_message_at: string | null
+          unread_count: number | null
+          user1_id: string | null
+          user2_id: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "messages_donation_id_fkey"
+            columns: ["donation_id"]
+            isOneToOne: false
+            referencedRelation: "donations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Functions: {
       has_role: {

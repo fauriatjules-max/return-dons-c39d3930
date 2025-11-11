@@ -1,10 +1,31 @@
-import { Search, Send } from "lucide-react";
+import { useState } from "react";
+import { Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
+import { ChatRoom } from "@/components/app/ChatRoom";
 
 const MessagesView = () => {
+  const [selectedChat, setSelectedChat] = useState<{
+    donationId: string;
+    userId: string;
+    userName: string;
+    userAvatar?: string;
+  } | null>(null);
+
+  if (selectedChat) {
+    return (
+      <ChatRoom
+        donationId={selectedChat.donationId}
+        otherUserId={selectedChat.userId}
+        otherUserName={selectedChat.userName}
+        otherUserAvatar={selectedChat.userAvatar}
+        onBack={() => setSelectedChat(null)}
+      />
+    );
+  }
+
   return (
     <div className="h-full flex flex-col bg-background">
       {/* Header - Mobile optimized */}
@@ -24,6 +45,12 @@ const MessagesView = () => {
         {conversations.map((conv, index) => (
           <button 
             key={conv.id}
+            onClick={() => setSelectedChat({
+              donationId: 'sample-donation-id',
+              userId: conv.id.toString(),
+              userName: conv.name,
+              userAvatar: conv.avatar
+            })}
             className="w-full flex items-center gap-2.5 sm:gap-3 p-3 sm:p-4 transition-all duration-300 hover:bg-muted/30 active:bg-muted/50 hover:scale-[1.02] active:scale-[0.98] border-b border-border text-left touch-manipulation animate-fade-in"
             style={{ animationDelay: `${index * 50}ms` }}
           >
