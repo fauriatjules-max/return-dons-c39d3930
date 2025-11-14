@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Index from "./pages/Index";
 import AppPage from "./pages/App";
 import Auth from "./pages/Auth";
+import MapPage from "./pages/MapPage";
 import NotFound from "./pages/NotFound";
 import { useAuth } from "@/hooks/useAuth";
 
@@ -43,6 +44,14 @@ const App = () => (
             element={
               <ProtectedRoute>
                 <AppPage />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/map" 
+            element={
+              <ProtectedRoute>
+                <MapPage />
               </ProtectedRoute>
             } 
           />
