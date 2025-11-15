@@ -8,6 +8,7 @@ import AppPage from "./pages/App";
 import Auth from "./pages/Auth";
 import MapPage from "./pages/MapPage";
 import TestMap from "./pages/TestMap";
+import MapComparison from "./pages/MapComparison";
 import NotFound from "./pages/NotFound";
 import { useAuth } from "@/hooks/useAuth";
 
@@ -57,6 +58,7 @@ const App = () => (
             } 
           />
           <Route path="/test-map" element={<TestMap />} />
+          <Route path="/map-comparison" element={<MapComparison />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
