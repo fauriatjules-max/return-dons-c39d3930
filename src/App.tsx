@@ -7,6 +7,7 @@ import Index from "./pages/Index";
 import AppPage from "./pages/App";
 import Auth from "./pages/Auth";
 import MapPage from "./pages/MapPage";
+import TestMap from "./pages/TestMap";
 import NotFound from "./pages/NotFound";
 import { useAuth } from "@/hooks/useAuth";
 
@@ -55,6 +56,7 @@ const App = () => (
               </ProtectedRoute>
             } 
           />
+          <Route path="/test-map" element={<TestMap />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
