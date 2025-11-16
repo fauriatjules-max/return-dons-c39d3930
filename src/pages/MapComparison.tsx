@@ -1,16 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import FreeSatelliteMap from '@/components/FreeSatelliteMap';
 import EmergencyMap from '@/components/EmergencyMap';
 import SimpleImageMap from '@/components/SimpleImageMap';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { Skeleton } from '@/components/ui/skeleton';
+import { toast } from 'sonner';
 
 const MapComparison = () => {
   const [activeMap, setActiveMap] = useState('satellite');
+  const queryClient = useQueryClient();
 
   // Fetch real donations from Supabase
   const { data: donations, isLoading } = useQuery({
@@ -37,6 +39,40 @@ const MapComparison = () => {
       })) || [];
     }
   });
+
+  // Set up real-time subscription
+  useEffect(() => {
+    const channel = supabase
+      .channel('donations-changes')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'donations'
+        },
+        (payload) => {
+          console.log('Donation change detected:', payload);
+          
+          // Invalidate and refetch donations
+          queryClient.invalidateQueries({ queryKey: ['donations-for-map'] });
+          
+          // Show toast notification for new donations
+          if (payload.eventType === 'INSERT') {
+            toast.success('Nouveau don disponible sur la carte!');
+          } else if (payload.eventType === 'UPDATE') {
+            toast.info('Un don a été mis à jour');
+          } else if (payload.eventType === 'DELETE') {
+            toast.info('Un don a été retiré');
+          }
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [queryClient]);
 
   return (
     <div className="min-h-screen bg-background p-6">
