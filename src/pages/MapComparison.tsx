@@ -5,9 +5,38 @@ import SimpleImageMap from '@/components/SimpleImageMap';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { useQuery } from '@tanstack/react-query';
+import { supabase } from '@/integrations/supabase/client';
+import { Skeleton } from '@/components/ui/skeleton';
 
 const MapComparison = () => {
   const [activeMap, setActiveMap] = useState('satellite');
+
+  // Fetch real donations from Supabase
+  const { data: donations, isLoading } = useQuery({
+    queryKey: ['donations-for-map'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('donations')
+        .select('id, title, description, category_id, location_lat, location_lng, status')
+        .eq('status', 'disponible')
+        .not('location_lat', 'is', null)
+        .not('location_lng', 'is', null);
+
+      if (error) throw error;
+
+      // Transform data to match FreeSatelliteMap format
+      return data?.map(donation => ({
+        id: donation.id,
+        title: donation.title,
+        description: donation.description,
+        category: donation.category_id,
+        location: {
+          coordinates: [Number(donation.location_lng), Number(donation.location_lat)]
+        }
+      })) || [];
+    }
+  });
 
   return (
     <div className="min-h-screen bg-background p-6">
@@ -56,26 +85,15 @@ const MapComparison = () => {
                   </div>
                   
                   <div className="h-[600px] border-2 border-border rounded-lg overflow-hidden">
-                    <FreeSatelliteMap
-                      donations={[
-                        {
-                          id: '1',
-                          title: 'Canapé en bon état',
-                          description: 'Canapé 3 places, quelques années mais encore confortable',
-                          category: 'objets',
-                          location: { coordinates: [2.3522, 48.8566] }
-                        },
-                        {
-                          id: '2',
-                          title: 'Vêtements hiver',
-                          description: 'Manteaux, pulls, écharpes en excellent état',
-                          category: 'vetements',
-                          location: { coordinates: [2.3422, 48.8666] }
-                        }
-                      ]}
-                      initialZoom={12}
-                      height="100%"
-                    />
+                    {isLoading ? (
+                      <Skeleton className="w-full h-full" />
+                    ) : (
+                      <FreeSatelliteMap
+                        donations={donations || []}
+                        initialZoom={12}
+                        height="100%"
+                      />
+                    )}
                   </div>
                 </div>
               </CardContent>
