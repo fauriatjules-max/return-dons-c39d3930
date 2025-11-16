@@ -1,5 +1,4 @@
 import streamlit as st
-import json
 
 st.set_page_config(
     page_title="Donation App - Partage Solidaire", 
@@ -25,7 +24,7 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# Données mockées sans pandas
+# Données mockées
 donations = [
     {
         "id": 1,
@@ -76,7 +75,7 @@ def get_category_icon(category):
     }
     return icons.get(category, '🎁')
 
-# Interface
+# Interface principale
 st.markdown('<h1 class="main-header">🎁 Donation App</h1>', unsafe_allow_html=True)
 st.markdown("### Donnez une seconde vie à vos objets - Rejoignez la communauté solidaire")
 
@@ -114,7 +113,7 @@ with col2:
 # Liste des dons
 st.markdown("## 🎁 Dons Disponibles")
 
-# Filtrage simple
+# Filtrage
 filtered_donations = donations
 if category_filter != "Toutes":
     filtered_donations = [d for d in donations if d['category'] == category_filter]
@@ -150,4 +149,4 @@ for donation in filtered_donations:
         
         st.markdown("---")
 
-st.success("🚀 Application déployée avec succès!")
+st.success("🚀 Application déployée avec succès! Plus d'erreur de compilation.")
