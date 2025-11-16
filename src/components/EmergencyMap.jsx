@@ -1,7 +1,9 @@
 import React, { useEffect, useRef } from 'react';
 
-const EmergencyMap = () => {
+const EmergencyMap = ({ donations = [] }) => {
   const mapContainer = useRef(null);
+  const mapInstance = useRef(null);
+  const markersRef = useRef([]);
 
   useEffect(() => {
     // Vérifier si on peut charger Leaflet
@@ -40,6 +42,7 @@ const EmergencyMap = () => {
 
         // Créer la carte
         const map = L.map(mapContainer.current).setView([48.8566, 2.3522], 13);
+        mapInstance.current = map;
         
         // Ajouter la couche satellite
         L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
@@ -50,6 +53,27 @@ const EmergencyMap = () => {
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
           attribution: 'OpenStreetMap'
         }).addTo(map);
+
+        // Ajouter les marqueurs pour les donations
+        donations.forEach(donation => {
+          if (donation.location?.coordinates) {
+            const [lng, lat] = donation.location.coordinates;
+            const marker = L.marker([lat, lng]).addTo(map);
+            marker.bindPopup(`
+              <div style="padding: 5px;">
+                <h3 style="margin: 0 0 5px 0; font-size: 14px; font-weight: bold;">${donation.title}</h3>
+                <p style="margin: 0; font-size: 12px;">${donation.description}</p>
+              </div>
+            `);
+            markersRef.current.push(marker);
+          }
+        });
+
+        // Ajuster la vue si on a des donations
+        if (donations.length > 0 && donations[0].location?.coordinates) {
+          const [lng, lat] = donations[0].location.coordinates;
+          map.setView([lat, lng], 12);
+        }
 
         console.log('Carte créée avec succès!');
       })
@@ -87,7 +111,16 @@ const EmergencyMap = () => {
         }
       });
 
-  }, []);
+    // Cleanup
+    return () => {
+      markersRef.current.forEach(marker => marker.remove());
+      markersRef.current = [];
+      if (mapInstance.current) {
+        mapInstance.current.remove();
+        mapInstance.current = null;
+      }
+    };
+  }, [donations]);
 
   return (
     <div>

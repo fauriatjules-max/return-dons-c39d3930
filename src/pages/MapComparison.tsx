@@ -117,7 +117,11 @@ const MapComparison = () => {
                     <Badge variant="secondary">⚠️ Temps de chargement</Badge>
                   </div>
                   
-                  <EmergencyMap />
+                  {isLoading ? (
+                    <Skeleton className="w-full h-[500px]" />
+                  ) : (
+                    <EmergencyMap donations={donations || []} />
+                  )}
                 </div>
               </CardContent>
             </Card>
