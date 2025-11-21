@@ -25,6 +25,10 @@ const mapStyles = `
     filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.3));
   }
   
+  .new-donation-marker {
+    animation: bounceIn 0.8s ease-out, glow 2s ease-in-out;
+  }
+  
   .user-location-marker {
     animation: pulse 2s infinite;
   }
@@ -33,6 +37,32 @@ const mapStyles = `
     0% { transform: scale(1); }
     50% { transform: scale(1.1); }
     100% { transform: scale(1); }
+  }
+  
+  @keyframes bounceIn {
+    0% {
+      transform: scale(0) translateY(-50px);
+      opacity: 0;
+    }
+    50% {
+      transform: scale(1.2) translateY(0);
+    }
+    70% {
+      transform: scale(0.9);
+    }
+    100% {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+  
+  @keyframes glow {
+    0%, 100% {
+      filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.3));
+    }
+    50% {
+      filter: drop-shadow(0 0 20px rgba(46, 139, 87, 0.8)) drop-shadow(2px 2px 4px rgba(0,0,0,0.3));
+    }
   }
 `;
 
@@ -57,7 +87,7 @@ const TILE_PROVIDERS = {
 };
 
 // Icônes personnalisées par catégorie
-const createCustomIcon = (category, isUserLocation = false) => {
+const createCustomIcon = (category, isUserLocation = false, isNew = false) => {
   const colors = {
     nourriture: '#FF7F50',
     objets: '#2E8B57', 
@@ -97,7 +127,7 @@ const createCustomIcon = (category, isUserLocation = false) => {
   
   return L.divIcon({
     html: svg,
-    className: 'donation-marker',
+    className: isNew ? 'donation-marker new-donation-marker' : 'donation-marker',
     iconSize: [30, 40],
     iconAnchor: [15, 40],
     popupAnchor: [0, -40]
@@ -127,6 +157,7 @@ function MapEvents({ onMapClick, onMapMove }) {
 
 const FreeSatelliteMap = ({ 
   donations = [], 
+  newDonationIds = [],
   onDonationSelect,
   userLocation = null,
   initialZoom = 12,
@@ -318,12 +349,14 @@ const FreeSatelliteMap = ({
             donation.location.coordinates[1], 
             donation.location.coordinates[0]
           ];
+          
+          const isNew = newDonationIds.includes(donation.id);
 
           return (
             <Marker
               key={donation.id}
               position={position}
-              icon={createCustomIcon(donation.category)}
+              icon={createCustomIcon(donation.category, false, isNew)}
               eventHandlers={{
                 click: () => handleDonationClick(donation)
               }}
