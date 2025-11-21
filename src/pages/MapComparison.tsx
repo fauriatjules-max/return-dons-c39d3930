@@ -12,6 +12,7 @@ import { toast } from 'sonner';
 
 const MapComparison = () => {
   const [activeMap, setActiveMap] = useState('satellite');
+  const [newDonationIds, setNewDonationIds] = useState<string[]>([]);
   const queryClient = useQueryClient();
 
   // Fetch real donations from Supabase
@@ -54,17 +55,25 @@ const MapComparison = () => {
         (payload) => {
           console.log('Donation change detected:', payload);
           
-          // Invalidate and refetch donations
-          queryClient.invalidateQueries({ queryKey: ['donations-for-map'] });
-          
-          // Show toast notification for new donations
+          // Track new donations for animation
           if (payload.eventType === 'INSERT') {
+            const newId = payload.new.id;
+            setNewDonationIds(prev => [...prev, newId]);
+            
+            // Remove from new list after animation completes (2 seconds)
+            setTimeout(() => {
+              setNewDonationIds(prev => prev.filter(id => id !== newId));
+            }, 2000);
+            
             toast.success('Nouveau don disponible sur la carte!');
           } else if (payload.eventType === 'UPDATE') {
             toast.info('Un don a été mis à jour');
           } else if (payload.eventType === 'DELETE') {
             toast.info('Un don a été retiré');
           }
+          
+          // Invalidate and refetch donations
+          queryClient.invalidateQueries({ queryKey: ['donations-for-map'] });
         }
       )
       .subscribe();
@@ -126,6 +135,7 @@ const MapComparison = () => {
                     ) : (
                       <FreeSatelliteMap
                         donations={donations || []}
+                        newDonationIds={newDonationIds}
                         initialZoom={12}
                         height="100%"
                       />
@@ -156,7 +166,10 @@ const MapComparison = () => {
                   {isLoading ? (
                     <Skeleton className="w-full h-[500px]" />
                   ) : (
-                    <EmergencyMap donations={donations || []} />
+                    <EmergencyMap 
+                      donations={donations || []} 
+                      newDonationIds={newDonationIds}
+                    />
                   )}
                 </div>
               </CardContent>

@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 
-const EmergencyMap = ({ donations = [] }) => {
+const EmergencyMap = ({ donations = [], newDonationIds = [] }) => {
   const mapContainer = useRef(null);
   const mapInstance = useRef(null);
   const markersRef = useRef([]);
@@ -40,6 +40,31 @@ const EmergencyMap = ({ donations = [] }) => {
       .then(L => {
         if (!mapContainer.current) return;
 
+        // Add animation styles
+        const style = document.createElement('style');
+        style.textContent = `
+          @keyframes markerBounce {
+            0% {
+              transform: scale(0) translateY(-50px);
+              opacity: 0;
+            }
+            50% {
+              transform: scale(1.3) translateY(0);
+            }
+            70% {
+              transform: scale(0.9);
+            }
+            100% {
+              transform: scale(1);
+              opacity: 1;
+            }
+          }
+          .new-marker-animation {
+            animation: markerBounce 0.8s ease-out;
+          }
+        `;
+        document.head.appendChild(style);
+
         // Créer la carte
         const map = L.map(mapContainer.current).setView([48.8566, 2.3522], 13);
         mapInstance.current = map;
@@ -58,11 +83,25 @@ const EmergencyMap = ({ donations = [] }) => {
         donations.forEach(donation => {
           if (donation.location?.coordinates) {
             const [lng, lat] = donation.location.coordinates;
-            const marker = L.marker([lat, lng]).addTo(map);
+            const isNew = newDonationIds.includes(donation.id);
+            
+            const marker = L.marker([lat, lng], {
+              icon: isNew ? L.icon({
+                iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
+                shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+                iconSize: [25, 41],
+                iconAnchor: [12, 41],
+                popupAnchor: [1, -34],
+                shadowSize: [41, 41],
+                className: 'new-marker-animation'
+              }) : L.Icon.Default()
+            }).addTo(map);
+            
             marker.bindPopup(`
               <div style="padding: 5px;">
                 <h3 style="margin: 0 0 5px 0; font-size: 14px; font-weight: bold;">${donation.title}</h3>
                 <p style="margin: 0; font-size: 12px;">${donation.description}</p>
+                ${isNew ? '<div style="color: #2E8B57; font-weight: bold; margin-top: 5px;">🆕 Nouveau!</div>' : ''}
               </div>
             `);
             markersRef.current.push(marker);
